@@ -1,0 +1,53 @@
+﻿@model FitnessProje.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Giriş Yap</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Login" method="post">
+                        <!-- Hata Mesajları -->
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label class="form-label">E-Posta Adresi</label>
+                            <input asp-for="Email" class="form-control" placeholder="ornek@sakarya.edu.tr" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Şifre</label>
+                            <input asp-for="Sifre" class="form-control" placeholder="******" />
+                            <span asp-validation-for="Sifre" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" asp-for="BeniHatirla" />
+                            <label class="form-check-label" asp-for="BeniHatirla">Beni Hatırla</label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Giriş Yap</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <small>Hesabın yok mu? <a asp-action="Register">Kayıt Ol</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
