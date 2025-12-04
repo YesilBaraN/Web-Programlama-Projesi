@@ -1,0 +1,53 @@
+﻿@model IEnumerable<FitnessProje.Models.RandevuSistemi>
+
+@{
+    ViewData["Title"] = "Randevularım";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Randevularım</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning">Henüz bir randevunuz bulunmamaktadır. <a asp-controller="Home" asp-action="Index">Hemen randevu al!</a></div>
+    }
+    else
+    {
+        <table class="table table-hover shadow-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Tarih</th>
+                    <th>Saat</th>
+                    <th>Hizmet</th>
+                    <th>Eğitmen</th>
+                    <th>Durum</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.RandevuTarihi.ToString("dd.MM.yyyy")</td>
+                        <td>@item.RandevuTarihi.ToString("HH:mm")</td>
+                        <td>@item.Hizmet?.HizmetAdi</td>
+                        <td>@item.Antrenör?.AdSoyad</td>
+                        <td>
+                            @if (item.Durum == "OnayBekliyor")
+                            {
+                                <span class="badge bg-warning text-dark">Onay Bekliyor</span>
+                            }
+                            else if (item.Durum == "Onaylandi")
+                            {
+                                <span class="badge bg-success">Onaylandı</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">İptal / Red</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Randevu Oluştur";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>📅 Randevu Oluştur</h3>
+                </div>
+                <div class="card-body p-4">
+
+                    <!-- Bilgi Alanı -->
+                    <div class="alert alert-info">
+                        <strong>Hizmet:</strong> @ViewBag.HizmetAdi <br />
+                        <strong>Süre:</strong> @ViewBag.Sure Dakika <br />
+                        <strong>Ücret:</strong> @ViewBag.Ucret TL
+                    </div>
+
+                    <!-- Uyarı Mesajları -->
+                    @if (TempData["Hata"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["Hata"]</div>
+                    }
+
+                    <form asp-action="Al" method="post">
+                        <!-- Hizmet ID'sini gizli olarak gönderiyoruz -->
+                        <input type="hidden" name="hizmetId" value="@ViewBag.HizmetId" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Eğitmen Seçiniz:</label>
+                            <select name="antrenorId" class="form-select" asp-items="ViewBag.Antrenorler" required>
+                                <option value="">-- Lütfen Seçiniz --</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tarih ve Saat:</label>
+                            <!-- min özelliği ile geçmiş tarih seçmeyi engelliyoruz (JavaScript ile daha iyi yapılır ama HTML5 de yeterli) -->
+                            <input type="datetime-local" name="tarih" class="form-control"
+                                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">Randevuyu Onayla</button>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-link text-muted mt-2">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

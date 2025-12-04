@@ -1,0 +1,60 @@
+﻿@model FitnessProje.Models.Antrenör
+
+@{
+    ViewData["Title"] = "Antrenör Ekle";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4>Yeni Antrenör Ekle</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" enctype="multipart/form-data">
+
+                        <div class="mb-3">
+                            <label class="form-label">Adı Soyadı</label>
+                            <input asp-for="AdSoyad" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Uzmanlık Alanı</label>
+                            <input asp-for="UzmanlikAlani" class="form-control" placeholder="Örn: Vücut Geliştirme, Kilo Verme" />
+                        </div>
+
+                        <!-- İLİŞKİSEL VERİ: HİZMET SEÇİMİ -->
+                        <div class="mb-3">
+                            <label class="form-label">Verdiği Hizmet (Ders)</label>
+                            <select asp-for="HizmetlerId" class="form-control" asp-items="ViewBag.HizmetlerId">
+                                <option value="">-- Hizmet Seçiniz --</option>
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Başlangıç Saati</label>
+                                <input asp-for="BaslangicSaati" type="time" class="form-control" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Bitiş Saati</label>
+                                <input asp-for="BitisSaati" type="time" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Fotoğraf</label>
+                            <input type="file" name="resimDosyasi" class="form-control" />
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                            <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

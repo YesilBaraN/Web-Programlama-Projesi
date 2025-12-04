@@ -1,0 +1,73 @@
+﻿@model IEnumerable<FitnessProje.Models.RandevuSistemi>
+
+@{
+    ViewData["Title"] = "Randevu Yönetimi";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-danger">Randevu Yönetim Paneli</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Üye</th>
+                <th>Tarih</th>
+                <th>Hizmet</th>
+                <th>Eğitmen</th>
+                <th>Durum</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>@item.Uye?.Ad @item.Uye?.Soyad</strong><br />
+                        <small class="text-muted">@item.Uye?.Email</small>
+                    </td>
+                    <td>
+                        @item.RandevuTarihi.ToString("dd.MM.yyyy HH:mm")
+                    </td>
+                    <td>@item.Hizmet?.HizmetAdi</td>
+                    <td>@item.Antrenör?.AdSoyad</td>
+                    <td>
+                        @if (item.Durum == "OnayBekliyor")
+                        {
+                            <span class="badge bg-warning text-dark">Bekliyor</span>
+                        }
+                        else if (item.Durum == "Onaylandi")
+                        {
+                            <span class="badge bg-success">Onaylandı</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">İptal</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Durum == "OnayBekliyor")
+                        {
+                            <div class="btn-group" role="group">
+                                <form asp-action="DurumDegistir" method="post">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <input type="hidden" name="durum" value="Onaylandi" />
+                                    <button type="submit" class="btn btn-sm btn-success mx-1">Onayla</button>
+                                </form>
+                                <form asp-action="DurumDegistir" method="post">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <input type="hidden" name="durum" value="Iptal" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Reddet</button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="text-muted small">İşlem yapıldı</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,8 +1,68 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model FitnessProje.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- HERO BÖLÜMÜ (Karşılama) -->
+<div class="p-5 mb-4 bg-light rounded-3 text-center" style="background-image: linear-gradient(to right, #2c3e50, #4ca1af); color: white;">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Fitness Dünyasına Hoş Geldiniz</h1>
+        <p class="col-md-8 fs-4 mx-auto">Sağlıklı bir yaşam için doğru adrestesiniz. Uzman eğitmenlerimiz ve size özel programlarımızla hedeflerinize ulaşın.</p>
+
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <a class="btn btn-warning btn-lg" asp-controller="Account" asp-action="Register">Hemen Üye Ol</a>
+        }
+        else
+        {
+            <a href="#hizmetler" class="btn btn-outline-light btn-lg">Hizmetleri Keşfet</a>
+        }
+    </div>
+</div>
+
+<!-- HİZMETLER BÖLÜMÜ -->
+<div id="hizmetler" class="container mt-5">
+    <h2 class="text-center mb-4 text-primary border-bottom pb-2">Hizmetlerimiz</h2>
+    <div class="row">
+        @foreach (var item in Model.Hizmetler)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <img src="@item.ResimUrl" class="card-img-top" alt="@item.HizmetAdi" style="height: 200px; object-fit: cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fw-bold">@item.HizmetAdi</h5>
+                        <p class="card-text text-muted">@item.Aciklama</p>
+                        <h6 class="text-success">@item.Ucret TL <small class="text-muted">/ @item.SureDakika dk</small></h6>
+                    </div>
+                    <div class="card-footer bg-white border-0 text-center pb-3">
+                        <a asp-controller="Randevu" asp-action="Al" asp-route-hizmetId="@item.Id" class="btn btn-primary w-100">Randevu Al</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- ANTRENÖRLER BÖLÜMÜ -->
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4 text-danger border-bottom pb-2">Eğitmen Kadromuz</h2>
+    <div class="row">
+        @foreach (var item in Model.Antrenörler)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 text-center shadow-sm">
+                    <div class="card-body">
+                        <img src="@item.FotoUrl" class="rounded-circle mb-3 border border-3 border-danger" width="120" height="120" style="object-fit: cover;" alt="@item.AdSoyad">
+                        <h5 class="card-title">@item.AdSoyad</h5>
+                        <p class="badge bg-secondary">@item.UzmanlikAlani</p>
+                        <p class="card-text small">
+                            <strong>Ders:</strong> @item.Hizmet?.HizmetAdi <br />
+                            <i class="bi bi-clock"></i> @item.BaslangicSaati - @item.BitisSaati
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
