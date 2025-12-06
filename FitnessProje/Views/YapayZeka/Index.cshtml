@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "AI Akıllı Koç";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row">
+
+        <!-- SOL TARAFF: Form Alanı -->
+        <div class="col-lg-4 col-md-12 mb-4">
+            <div class="card shadow-lg border-0" style="border-radius: 15px; overflow: hidden;">
+                <div class="card-header text-white text-center p-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h3 class="fw-bold mb-0">🤖 AI Koç</h3>
+                    <small class="text-white-50">Google Gemini Altyapısı</small>
+                </div>
+                <div class="card-body p-4 bg-light">
+                    <form asp-action="OneriAl" method="post" id="aiForm" onsubmit="loadingGoster()">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-muted">Cinsiyet</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="cinsiyet" id="male" value="Erkek" checked>
+                                <label class="btn btn-outline-primary" for="male">Erkek</label>
+
+                                <input type="radio" class="btn-check" name="cinsiyet" id="female" value="Kadın">
+                                <label class="btn btn-outline-danger" for="female">Kadın</label>
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-4">
+                                <label class="form-label fw-bold text-muted">Yaş</label>
+                                <input type="number" name="yas" class="form-control text-center" value="@ViewBag.Yas" placeholder="25" required />
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label fw-bold text-muted">Kilo</label>
+                                <input type="number" name="kilo" class="form-control text-center" value="@ViewBag.Kilo" placeholder="70" required />
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label fw-bold text-muted">Boy</label>
+                                <input type="number" name="boy" class="form-control text-center" value="@ViewBag.Boy" placeholder="175" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-muted">Hedefiniz Nedir?</label>
+                            <select name="hedef" class="form-select">
+                                <option value="Hızlı Kilo Verme">🏃 Hızlı Kilo Verme</option>
+                                <option value="Kas Kütlesi Kazanma">💪 Kas / Hacim Kazanma</option>
+                                <option value="Yağ Yakımı ve Sıkılaşma">🔥 Yağ Yakımı ve Sıkılaşma</option>
+                                <option value="Sağlıklı Yaşam ve Zindelik">🧘 Sağlıklı Yaşam ve Zindelik</option>
+                            </select>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" id="btnAnaliz" class="btn btn-primary btn-lg text-white shadow-sm" style="background: #764ba2; border:none;">
+                                ✨ Program Oluştur
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- YÜKLENİYOR ANİMASYONU (Başlangıçta Gizli) -->
+                    <div id="loadingArea" class="text-center mt-4" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Yükleniyor...</span>
+                        </div>
+                        <p class="mt-2 text-muted small">Yapay zeka planını hazırlıyor, lütfen bekle...</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- SAĞ TARAF: Yapay Zeka Cevabı -->
+        <div class="col-lg-8 col-md-12">
+            @if (ViewBag.Sonuc != null)
+            {
+                <div class="card shadow-lg border-0 h-100" style="border-radius: 15px;">
+                    <div class="card-header bg-white border-bottom p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="text-primary fw-bold mb-0">💡 Size Özel Tavsiyeler</h5>
+                            <span class="badge bg-success">Tamamlandı</span>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Yapay Zekadan gelen metni düzgün formatta gösterir -->
+                        <div style="white-space: pre-wrap; font-family: 'Segoe UI', sans-serif; line-height: 1.8; color: #444;">@ViewBag.Sonuc</div>
+
+                        <div class="alert alert-info mt-4 d-flex align-items-center">
+                            <i class="bi bi-info-circle-fill me-2 fs-4"></i>
+                            <div>
+                                Bu program yapay zeka (Google Gemini) tarafından oluşturulmuştur.
+                                Profesyonel bir eğitmen ile <a asp-controller="Home" asp-action="Index" class="fw-bold">randevu alarak</a> detaylandırabilirsiniz.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- BOŞ DURUM (Placeholder) -->
+                <div class="h-100 d-flex flex-column align-items-center justify-content-center text-center p-5 text-muted border rounded-3 bg-white shadow-sm" style="border-style: dashed !important; border-width: 2px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" width="120" class="mb-3 opacity-50" alt="AI Icon" />
+                    <h3>Henüz Analiz Yapılmadı</h3>
+                    <p class="col-md-8 mx-auto">Sol taraftaki bilgileri doldurarak <strong>Google Gemini AI</strong> destekli, tamamen sana özel beslenme ve antrenman programını saniyeler içinde oluşturabilirsin.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Yükleniyor Animasyonu İçin Basit Script -->
+<script>
+    function loadingGoster() {
+        // Butonu gizle veya pasif yap
+        document.getElementById('btnAnaliz').style.display = 'none';
+        // Loading alanını göster
+        document.getElementById('loadingArea').style.display = 'block';
+    }
+</script>

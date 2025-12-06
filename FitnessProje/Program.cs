@@ -25,8 +25,16 @@ builder.Services.AddIdentity<UygulamaKullanýcý, IdentityRole>(options =>
     .AddDefaultTokenProviders();
 
 // 3. MVC (Controller ve View) Servislerini Ekle
-builder.Services.AddControllersWithViews();
+// JSON Döngü Hatasýný Çözme ve API Servisleri
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 
+// Swagger (API Dokümantasyonu) Ekleme
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Hata Yönetimi ve HTTPS
@@ -35,7 +43,9 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
+// Swagger Arayüzünü Aktif Et
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
