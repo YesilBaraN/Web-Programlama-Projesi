@@ -1,73 +1,76 @@
 ﻿@model IEnumerable<FitnessProje.Models.RandevuSistemi>
-
 @{
     ViewData["Title"] = "Randevu Yönetimi";
 }
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-danger">Randevu Yönetim Paneli</h2>
+<h2 class="fw-bold mb-4 text-danger">Randevu Talepleri</h2>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>Üye</th>
-                <th>Tarih</th>
-                <th>Hizmet</th>
-                <th>Eğitmen</th>
-                <th>Durum</th>
-                <th>İşlemler</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+<div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-dark text-white">
                 <tr>
-                    <td>
-                        <strong>@item.Uye?.Ad @item.Uye?.Soyad</strong><br />
-                        <small class="text-muted">@item.Uye?.Email</small>
-                    </td>
-                    <td>
-                        @item.RandevuTarihi.ToString("dd.MM.yyyy HH:mm")
-                    </td>
-                    <td>@item.Hizmet?.HizmetAdi</td>
-                    <td>@item.Antrenör?.AdSoyad</td>
-                    <td>
-                        @if (item.Durum == "OnayBekliyor")
-                        {
-                            <span class="badge bg-warning text-dark">Bekliyor</span>
-                        }
-                        else if (item.Durum == "Onaylandi")
-                        {
-                            <span class="badge bg-success">Onaylandı</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">İptal</span>
-                        }
-                    </td>
-                    <td>
-                        @if (item.Durum == "OnayBekliyor")
-                        {
-                            <div class="btn-group" role="group">
-                                <form asp-action="DurumDegistir" method="post">
-                                    <input type="hidden" name="id" value="@item.Id" />
-                                    <input type="hidden" name="durum" value="Onaylandi" />
-                                    <button type="submit" class="btn btn-sm btn-success mx-1">Onayla</button>
-                                </form>
-                                <form asp-action="DurumDegistir" method="post">
-                                    <input type="hidden" name="id" value="@item.Id" />
-                                    <input type="hidden" name="durum" value="Iptal" />
-                                    <button type="submit" class="btn btn-sm btn-danger">Reddet</button>
-                                </form>
-                            </div>
-                        }
-                        else
-                        {
-                            <span class="text-muted small">İşlem yapıldı</span>
-                        }
-                    </td>
+                    <th class="ps-4">Üye Bilgisi</th>
+                    <th>Tarih</th>
+                    <th>Hizmet / Eğitmen</th>
+                    <th>Durum</th>
+                    <th class="text-end pe-4">İşlem</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <div class="fw-bold">@item.Uye?.Ad @item.Uye?.Soyad</div>
+                            <small class="text-muted">@item.Uye?.Email</small>
+                        </td>
+                        <td class="fw-bold text-dark">
+                            @item.RandevuTarihi.ToString("dd.MM.yyyy") <br />
+                            <small class="text-muted">@item.RandevuTarihi.ToString("HH:mm")</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border">@item.Hizmet?.HizmetAdi</span>
+                            <div class="small mt-1 text-muted">@item.Antrenör?.AdSoyad</div>
+                        </td>
+                        <td>
+                            @if (item.Durum == "OnayBekliyor")
+                            {
+                                <span class="badge bg-warning text-dark">Bekliyor</span>
+                            }
+                            else if (item.Durum == "Onaylandi")
+                            {
+                                <span class="badge bg-success">Onaylandı</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Reddedildi</span>
+                            }
+                        </td>
+                        <td class="text-end pe-4">
+                            @if (item.Durum == "OnayBekliyor")
+                            {
+                                <div class="btn-group shadow-sm rounded-pill" role="group">
+                                    <form asp-action="DurumDegistir" method="post">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <input type="hidden" name="durum" value="Onaylandi" />
+                                        <button type="submit" class="btn btn-sm btn-success rounded-start-pill px-3"><i class="bi bi-check-lg"></i></button>
+                                    </form>
+                                    <form asp-action="DurumDegistir" method="post">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <input type="hidden" name="durum" value="Iptal" />
+                                        <button type="submit" class="btn btn-sm btn-danger rounded-end-pill px-3"><i class="bi bi-x-lg"></i></button>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="text-muted small fst-italic">İşlem Tamam</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

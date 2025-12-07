@@ -1,59 +1,55 @@
 ﻿@model FitnessProje.Models.Antrenör
-
 @{
     ViewData["Title"] = "Antrenör Ekle";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-warning text-dark">
-                    <h4>Yeni Antrenör Ekle</h4>
-                </div>
-                <div class="card-body">
-                    <form asp-action="Create" enctype="multipart/form-data">
-
-                        <div class="mb-3">
-                            <label class="form-label">Adı Soyadı</label>
-                            <input asp-for="AdSoyad" class="form-control" required />
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-white py-3 border-0">
+                <h4 class="fw-bold mb-0 text-danger">Yeni Antrenör Ekle</h4>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Ad Soyad</label>
+                            <input asp-for="AdSoyad" class="form-control rounded-3" />
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Uzmanlık Alanı</label>
-                            <input asp-for="UzmanlikAlani" class="form-control" placeholder="Örn: Vücut Geliştirme, Kilo Verme" />
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Uzmanlık Alanı</label>
+                            <input asp-for="UzmanlikAlani" class="form-control rounded-3" placeholder="Örn: Fitness" />
                         </div>
+                    </div>
 
-                        <!-- İLİŞKİSEL VERİ: HİZMET SEÇİMİ -->
-                        <div class="mb-3">
-                            <label class="form-label">Verdiği Hizmet (Ders)</label>
-                            <select asp-for="HizmetlerId" class="form-control" asp-items="ViewBag.HizmetlerId">
-                                <option value="">-- Hizmet Seçiniz --</option>
-                            </select>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Verdiği Ders</label>
+                        <select asp-for="HizmetlerId" class="form-select rounded-3" asp-items="ViewBag.HizmetlerId">
+                            <option value="">-- Hizmet Seçiniz --</option>
+                        </select>
+                    </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Başlangıç Saati</label>
-                                <input asp-for="BaslangicSaati" type="time" class="form-control" required />
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Bitiş Saati</label>
-                                <input asp-for="BitisSaati" type="time" class="form-control" required />
-                            </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Başlangıç Saati</label>
+                            <input asp-for="BaslangicSaati" type="time" class="form-control rounded-3" />
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Bitiş Saati</label>
+                            <input asp-for="BitisSaati" type="time" class="form-control rounded-3" />
+                        </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Fotoğraf</label>
-                            <input type="file" name="resimDosyasi" class="form-control" />
-                        </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Profil Fotoğrafı</label>
+                        <input type="file" name="resimDosyasi" class="form-control rounded-3" />
+                    </div>
 
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Kaydet</button>
-                            <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
-                        </div>
-                    </form>
-                </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <a asp-action="Index" class="btn btn-light rounded-pill px-4">İptal</a>
+                        <button type="submit" class="btn btn-danger rounded-pill px-4 shadow-sm">Kaydet</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

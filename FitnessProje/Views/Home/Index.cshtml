@@ -1,42 +1,64 @@
 ﻿@model FitnessProje.ViewModels.HomeViewModel
-
 @{
     ViewData["Title"] = "Ana Sayfa";
 }
 
-<!-- HERO BÖLÜMÜ (Karşılama) -->
-<div class="p-5 mb-4 bg-light rounded-3 text-center" style="background-image: linear-gradient(to right, #2c3e50, #4ca1af); color: white;">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Fitness Dünyasına Hoş Geldiniz</h1>
-        <p class="col-md-8 fs-4 mx-auto">Sağlıklı bir yaşam için doğru adrestesiniz. Uzman eğitmenlerimiz ve size özel programlarımızla hedeflerinize ulaşın.</p>
+<!-- HERO SECTION (BÜYÜK RESİM) -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="position-relative rounded-4 overflow-hidden shadow-lg" style="height: 500px;">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop"
+                 class="w-100 h-100 object-fit-cover" alt="Fitness Gym" style="object-fit: cover;">
 
-        @if (!User.Identity.IsAuthenticated)
-        {
-            <a class="btn btn-warning btn-lg" asp-controller="Account" asp-action="Register">Hemen Üye Ol</a>
-        }
-        else
-        {
-            <a href="#hizmetler" class="btn btn-outline-light btn-lg">Hizmetleri Keşfet</a>
-        }
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center text-white"
+                 style="background: rgba(0,0,0,0.5);">
+                <h1 class="display-3 fw-bold mb-3 text-uppercase">Hedefine Ulaş</h1>
+                <p class="fs-4 mb-4 col-lg-8">Profesyonel eğitmenler ve yapay zeka destekli programlarla en iyi versiyonunu yarat.</p>
+
+                <div class="d-flex gap-3">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-danger btn-lg px-4 rounded-pill shadow">Hemen Başla</a>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg px-4 rounded-pill">Giriş Yap</a>
+                    }
+                    else
+                    {
+                        <a href="#hizmetler" class="btn btn-light btn-lg px-4 rounded-pill text-dark fw-bold">Hizmetleri İncele</a>
+                        <a asp-controller="YapayZeka" asp-action="Index" class="btn btn-success btn-lg px-4 rounded-pill shadow">AI Koç</a>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- HİZMETLER BÖLÜMÜ -->
-<div id="hizmetler" class="container mt-5">
-    <h2 class="text-center mb-4 text-primary border-bottom pb-2">Hizmetlerimiz</h2>
-    <div class="row">
+<!-- HİZMETLER -->
+<div id="hizmetler" class="mb-5">
+    <div class="text-center mb-5">
+        <h6 class="text-primary fw-bold text-uppercase ls-2">Neler Sunuyoruz?</h6>
+        <h2 class="fw-bold">Hizmetlerimiz</h2>
+    </div>
+
+    <div class="row g-4">
         @foreach (var item in Model.Hizmetler)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <img src="@item.ResimUrl" class="card-img-top" alt="@item.HizmetAdi" style="height: 200px; object-fit: cover;">
-                    <div class="card-body text-center">
-                        <h5 class="card-title fw-bold">@item.HizmetAdi</h5>
-                        <p class="card-text text-muted">@item.Aciklama</p>
-                        <h6 class="text-success">@item.Ucret TL <small class="text-muted">/ @item.SureDakika dk</small></h6>
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-3">
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px;">
+                        @if (!string.IsNullOrEmpty(item.ResimUrl))
+                        {
+                            <img src="@item.ResimUrl" class="img-fluid" style="max-height: 100%; object-fit: contain;" alt="@item.HizmetAdi">
+                        }
+                        else
+                        {
+                            <i class="bi bi-activity fs-1 text-muted"></i>
+                        }
                     </div>
-                    <div class="card-footer bg-white border-0 text-center pb-3">
-                        <a asp-controller="Randevu" asp-action="Al" asp-route-hizmetId="@item.Id" class="btn btn-primary w-100">Randevu Al</a>
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold">@item.HizmetAdi</h4>
+                        <p class="text-muted small">@item.Aciklama</p>
+                        <h5 class="text-primary fw-bold mb-3">@item.Ucret.ToString("N0") TL</h5>
+                        <a asp-controller="Randevu" asp-action="Al" asp-route-hizmetId="@item.Id" class="btn btn-primary w-100 rounded-pill">Randevu Al</a>
                     </div>
                 </div>
             </div>
@@ -44,21 +66,26 @@
     </div>
 </div>
 
-<!-- ANTRENÖRLER BÖLÜMÜ -->
-<div class="container mt-5 mb-5">
-    <h2 class="text-center mb-4 text-danger border-bottom pb-2">Eğitmen Kadromuz</h2>
-    <div class="row">
+<!-- ANTRENÖRLER -->
+<div class="mb-5">
+    <div class="text-center mb-5">
+        <h6 class="text-danger fw-bold text-uppercase ls-2">Kadro</h6>
+        <h2 class="fw-bold">Eğitmenlerimiz</h2>
+    </div>
+
+    <div class="row g-4">
         @foreach (var item in Model.Antrenörler)
         {
-            <div class="col-md-3 mb-4">
-                <div class="card h-100 text-center shadow-sm">
+            <div class="col-md-3">
+                <div class="card h-100 text-center py-4">
+                    <div class="mx-auto mb-3" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 3px solid #e74c3c;">
+                        <img src="@item.FotoUrl" class="w-100 h-100 object-fit-cover" alt="@item.AdSoyad" style="object-fit: cover;">
+                    </div>
                     <div class="card-body">
-                        <img src="@item.FotoUrl" class="rounded-circle mb-3 border border-3 border-danger" width="120" height="120" style="object-fit: cover;" alt="@item.AdSoyad">
-                        <h5 class="card-title">@item.AdSoyad</h5>
-                        <p class="badge bg-secondary">@item.UzmanlikAlani</p>
-                        <p class="card-text small">
-                            <strong>Ders:</strong> @item.Hizmet?.HizmetAdi <br />
-                            <i class="bi bi-clock"></i> @item.BaslangicSaati - @item.BitisSaati
+                        <h5 class="card-title fw-bold">@item.AdSoyad</h5>
+                        <span class="badge bg-light text-dark border mb-2">@item.UzmanlikAlani</span>
+                        <p class="small text-muted mb-0">
+                            <i class="bi bi-clock-history"></i> @item.BaslangicSaati - @item.BitisSaati
                         </p>
                     </div>
                 </div>

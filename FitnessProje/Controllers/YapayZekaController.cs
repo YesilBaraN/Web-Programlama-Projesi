@@ -7,7 +7,7 @@ namespace FitnessProje.Controllers
     [Authorize]
     public class YapayZekaController : Controller
     {
-        private const string ApiKey = "AIzaSyAXtY16A_lGciheFB8B95x8m3AYMuCPr0Q";
+        private const string ApiKey = "";
 
         [HttpGet]
         public IActionResult Index()

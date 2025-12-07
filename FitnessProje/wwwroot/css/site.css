@@ -1,22 +1,67 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* --- GENEL AYARLAR --- */
 body {
-  margin-bottom: 60px;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa; /* Çok açýk gri arka plan */
+    color: #2d3436;
+}
+
+a {
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+/* --- KART TASARIMLARI --- */
+.card {
+    border: none;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Hafif gölge */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+    .card:hover {
+        transform: translateY(-8px); /* Mouse gelince yukarý kalkma efekti */
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 600;
+}
+
+/* --- BUTONLAR --- */
+.btn {
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); /* Lacivertten Maviye */
+    border: none;
+}
+
+    .btn-primary:hover {
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        transform: scale(1.02);
+    }
+
+.btn-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); /* Yeþilden Açýk Yeþile */
+    border: none;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #cb2d3e 0%, #ef473a 100%); /* Kýrmýzý tonlarý */
+    border: none;
+}
+
+/* --- NAVBAR GÜZELLEÞTÝRME --- */
+.navbar-brand {
+    letter-spacing: -0.5px;
+}
+
+.nav-link:hover {
+    color: #3498db !important;
 }

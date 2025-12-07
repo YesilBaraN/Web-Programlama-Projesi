@@ -1,90 +1,107 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FitnessProje</title>
+    <title>@ViewData["Title"] - FitnessPro</title>
+
+    <!-- 1. BOOTSTRAP CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- 2. MODERN FONT (POPPINS) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- 3. İKONLAR -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- 4. BİZİM CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/FitnessProje.styles.css" asp-append-version="true" />
 </head>
-<body>
+
+<!-- KRİTİK NOKTA: d-flex ve min-vh-100 sınıfı sayfayı ekran boyuna yayar -->
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- NAVBAR (MENÜ) -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Fitness Salonu</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-primary fs-4" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-activity"></i> FitnessPro
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Hakkımızda</a>
+                            <a class="nav-link text-dark fw-medium" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-controller="Hizmetler" asp-action="Index">Yönetim Paneli</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-controller="Antrenörler" asp-action="Index">Antrenör Yönetimi</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-controller="Randevu" asp-action="Yonetim">Randevu Talepleri</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-danger fw-bold" href="#" role="button" data-bs-toggle="dropdown">
+                                    Yönetim Paneli
+                                </a>
+                                <ul class="dropdown-menu border-0 shadow">
+                                    <li><a class="dropdown-item" asp-controller="Hizmetler" asp-action="Index">Hizmet Yönetimi</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Antrenörler" asp-action="Index">Antrenör Yönetimi</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Randevu" asp-action="Yonetim">Randevu Talepleri</a></li>
+                                </ul>
                             </li>
                         }
-                        
                     </ul>
 
-                    <!-- GİRİŞ / ÇIKIŞ KISMI -->
-                    <ul class="navbar-nav">
+                    <div class="d-flex align-items-center gap-2">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <span class="nav-link text-dark">Merhaba, <strong>@User.Identity.Name</strong></span>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Randevu" asp-action="Index">📅 Randevularım</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-primary fw-bold" asp-controller="YapayZeka" asp-action="Index">🤖 AI Koç</a>
-                            </li>
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
-                                    <button type="submit" class="nav-link btn btn-link text-dark">Çıkış Yap</button>
-                                </form>
-                            </li>
+                            <span class="text-muted small me-2">Merhaba, <strong>@User.Identity.Name</strong></span>
+
+                            <a class="btn btn-outline-primary btn-sm rounded-pill" asp-controller="YapayZeka" asp-action="Index">
+                                <i class="bi bi-robot"></i> AI Koç
+                            </a>
+                            <a class="btn btn-outline-dark btn-sm rounded-pill" asp-controller="Randevu" asp-action="Index">
+                                Randevularım
+                            </a>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-link text-danger text-decoration-none fw-bold btn-sm">Çıkış</button>
+                            </form>
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Giriş Yap</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-primary fw-bold" asp-controller="Account" asp-action="Register">Kayıt Ol</a>
-                            </li>
+                            <a class="btn btn-outline-dark btn-sm rounded-pill px-3" asp-controller="Account" asp-action="Login">Giriş</a>
+                            <a class="btn btn-primary btn-sm rounded-pill px-3" asp-controller="Account" asp-action="Register">Kayıt Ol</a>
                         }
-                    </ul>
-
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- İÇERİK ALANI (flex-grow-1: Boşluğu doldurur ve footer'ı aşağı iter) -->
+    <main class="flex-grow-1">
+        <div class="container py-4">
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- FOOTER (ALT BİLGİ) -->
+    <footer class="bg-dark text-white py-4 mt-auto">
         <div class="container">
-            &copy; 2025 - FitnessProje - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0 small">&copy; 2025 <strong>FitnessPro</strong>. Tüm hakları saklıdır.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                    <a href="#" class="text-white-50 me-3"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white-50 me-3"><i class="bi bi-twitter-x"></i></a>
+                    <a asp-controller="Home" asp-action="Privacy" class="text-white-50 small text-decoration-none">Gizlilik Politikası</a>
+                </div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
