@@ -68,15 +68,69 @@ namespace FitnessProje.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // 4. SİLME İŞLEMİ
+        // 4. SİLME KONTROLÜ (GELİŞTİRİLMİŞ DETAYLI UYARI)
         public async Task<IActionResult> Delete(int id)
         {
             var antrenor = await _context.Antrenörler.FindAsync(id);
-            if (antrenor != null)
+            if (antrenor == null) return NotFound();
+
+            // Sadece var mı diye değil, KAÇ TANE var diye soruyoruz
+            var randevuSayisi = await _context.Randevular.CountAsync(r => r.AntrenörId == id);
+
+            if (randevuSayisi > 0)
             {
-                _context.Antrenörler.Remove(antrenor);
-                await _context.SaveChangesAsync();
+                // SweetAlert için detaylı HTML mesaj hazırlıyoruz
+                string uyariDetayi = $"<strong>{antrenor.AdSoyad}</strong> isimli eğitmenin sistemde <strong>{randevuSayisi}</strong> adet kayıtlı randevusu bulunmaktadır.<br><br>" +
+                                     "Eğer silme işlemine devam ederseniz:<br>" +
+                                     "1. Bu randevuların hepsi <b>İPTAL</b> edilecek.<br>" +
+                                     "2. İlgili üyelere otomatik <b>BİLDİRİM</b> gönderilecek.<br><br>" +
+                                     "Bu işlemi yapmak istediğinize emin misiniz?";
+
+                TempData["SilmeOnayiGerekli"] = true;
+                TempData["SilinecekId"] = id;
+                TempData["SilinecekTur"] = "Antrenor";
+                TempData["UyariMesaji"] = uyariDetayi; // Artık sayı içeren detaylı mesaj gidiyor
+
+                return RedirectToAction(nameof(Index));
             }
+
+            // Randevu yoksa temiz sil
+            _context.Antrenörler.Remove(antrenor);
+            await _context.SaveChangesAsync();
+            TempData["Basarili"] = "Antrenör başarıyla silindi (Bağlı randevusu yoktu).";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // 5. ZORLA SİLME (FORCE DELETE) - Admin Onaylarsa Burası Çalışır
+        [HttpPost]
+        public async Task<IActionResult> ForceDelete(int id)
+        {
+            var antrenor = await _context.Antrenörler.Include(a => a.Randevular).FirstOrDefaultAsync(a => a.Id == id);
+            if (antrenor == null) return NotFound();
+
+            // 1. Randevusu olan üyelere bildirim oluştur
+            foreach (var randevu in antrenor.Randevular)
+            {
+                var bildirim = new Bildirim
+                {
+                    UyeId = randevu.UyeId,
+                    Mesaj = $"Sayın üyemiz, {randevu.RandevuTarihi:dd.MM.yyyy HH:mm} tarihindeki {antrenor.AdSoyad} ile olan randevunuz, eğitmenin kurumumuzdan ayrılması nedeniyle iptal edilmiştir.",
+                    Tarih = DateTime.Now,
+                    OkunduMu = false
+                };
+                _context.Bildirimler.Add(bildirim);
+            }
+
+            // 2. Randevuları Sil
+            _context.Randevular.RemoveRange(antrenor.Randevular);
+
+            // 3. Antrenörü Sil
+            _context.Antrenörler.Remove(antrenor);
+
+            await _context.SaveChangesAsync();
+            TempData["Basarili"] = "Antrenör ve bağlı tüm randevular silindi, üyelere bildirim gönderildi.";
+
             return RedirectToAction(nameof(Index));
         }
     }

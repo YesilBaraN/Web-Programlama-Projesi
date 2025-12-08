@@ -159,6 +159,46 @@ namespace FitnessProje.Controllers
             return RedirectToAction(nameof(Yonetim));
         }
 
+        // --- 6. ADMIN İÇİN: RANDEVU SİLME (DELETE) ---
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Sil(int id)
+        {
+            // 1. Randevuyu detaylarıyla bul (Bildirim için gerekli)
+            var randevu = await _context.Randevular
+                                        .Include(r => r.Hizmet)
+                                        .Include(r => r.Antrenör)
+                                        .Include(r => r.Uye)
+                                        .FirstOrDefaultAsync(r => r.Id == id);
 
+            if (randevu == null)
+            {
+                TempData["Hata"] = "Randevu bulunamadı.";
+                return RedirectToAction(nameof(Yonetim));
+            }
+
+            // 2. Üyeye Bildirim Gönder (Nezaketen)
+            // Eğer üye hala sistemdeyse ona haber verelim.
+            if (randevu.Uye != null)
+            {
+                var bildirim = new Bildirim
+                {
+                    UyeId = randevu.UyeId,
+                    Mesaj = $"Sayın {randevu.Uye.Ad} {randevu.Uye.Soyad}, <br>" +
+                            $"{randevu.RandevuTarihi:dd.MM.yyyy HH:mm} tarihindeki <strong>{randevu.Hizmet?.HizmetAdi}</strong> randevunuz yönetim tarafından silinmiştir.",
+                    Tarih = DateTime.Now,
+                    OkunduMu = false
+                };
+                _context.Bildirimler.Add(bildirim);
+            }
+
+            // 3. Randevuyu Sil
+            _context.Randevular.Remove(randevu);
+            await _context.SaveChangesAsync();
+
+            TempData["Basarili"] = "Randevu kalıcı olarak silindi ve üyeye bildirim gönderildi.";
+            return RedirectToAction(nameof(Yonetim));
+        }
     }
 }

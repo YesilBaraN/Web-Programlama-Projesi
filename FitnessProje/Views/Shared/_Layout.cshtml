@@ -1,10 +1,16 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using FitnessProje.Data
+@inject ApplicationDbContext _db
+@inject UserManager<FitnessProje.Models.UygulamaKullanıcı> _userManager
+
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FitnessPro</title>
-
+    <!-- AOS Animasyon CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- 1. BOOTSTRAP CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
@@ -21,6 +27,24 @@
 <!-- KRİTİK NOKTA: d-flex ve min-vh-100 sınıfı sayfayı ekran boyuna yayar -->
 <body class="d-flex flex-column min-vh-100">
 
+    <!-- SAYFA YÜKLENİYOR EKRANI -->
+    <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ffffff; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease;">
+        <div class="text-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+            <h5 class="mt-3 fw-bold text-dark" style="letter-spacing: 2px;">FITNESS PRO</h5>
+        </div>
+    </div>
+
+    <script>
+        // Sayfa tamamen yüklendiğinde loader'ı kaldır
+        window.addEventListener('load', function () {
+            var loader = document.getElementById('preloader');
+            loader.style.opacity = '0';
+            setTimeout(function () {
+                loader.style.display = 'none';
+            }, 500);
+        });
+    </script>
     <!-- NAVBAR (MENÜ) -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
@@ -105,6 +129,120 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- 1. SWEETALERT KÜTÜPHANESİ -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- 2. OTOMATİK BİLDİRİM YAKALAYICI -->
+    <script>
+        
+        // Başarılı Mesajı (Success)
+        @if (TempData["Basarili"] != null)
+        {
+            <text>
+                Swal.fire({
+                    title: 'Harika!',
+                    text: '@TempData["Basarili"]',
+                    icon: 'success',
+                    confirmButtonText: 'Tamam',
+                    confirmButtonColor: '#2c3e50'
+                });
+            </text>
+        }
+
+        // Hata Mesajı (Error)
+        @if (TempData["Hata"] != null)
+        {
+            <text>
+                Swal.fire({
+                    title: 'Ops!',
+                    text: '@TempData["Hata"]',
+                    icon: 'error',
+                    confirmButtonText: 'Tamam',
+                    confirmButtonColor: '#e74c3c'
+                });
+            </text>
+        }
+
+        // --- BURADAN BAŞLA: ADMIN ZORLA SİLME ONAYI (YENİ EKLENECEK KISIM) ---
+        @if (TempData["SilmeOnayiGerekli"] != null && (bool)TempData["SilmeOnayiGerekli"] == true)
+        {
+            <text>
+                Swal.fire({
+                    title: '⚠️ Kritik İşlem Onayı',
+                    html: '@Html.Raw(TempData["UyariMesaji"])',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Evet, Risk Alıyorum ve Siliyorum!',
+                    cancelButtonText: 'Vazgeç',
+                    focusCancel: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var form = document.createElement('form');
+                        form.method = 'POST';
+                        var controller = '@TempData["SilinecekTur"]' == 'Antrenor' ? '/Antrenörler/ForceDelete' : '/Hizmetler/ForceDelete';
+                        form.action = controller;
+
+                        var input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'id';
+                        input.value = '@TempData["SilinecekId"]';
+
+                        form.appendChild(input);
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            </text>
+        }
+        // --- BURADA BİTİYOR ---
+
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
+    <!-- AOS Animasyon JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+          duration: 800, // Animasyon süresi (milisaniye)
+          once: true,    // Sadece bir kere çalışsın (aşağı yukarı yapınca tekrar etmesin)
+          easing: 'ease-out-cubic'
+        });
+    </script>
+    <!-- KULLANICI BİLDİRİM KONTROLÜ -->
+    @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
+    {
+        // Giriş yapan kullanıcının ID'sini al
+        var user = await _userManager.GetUserAsync(User);
+        if (user != null)
+        {
+            // Okunmamış bildirimleri çek
+            var bildirimler = _db.Bildirimler
+            .Where(b => b.UyeId == user.Id && !b.OkunduMu)
+            .ToList();
+
+            if (bildirimler.Any())
+            {
+                // Mesajları birleştir
+                var mesaj = string.Join("<br><br>", bildirimler.Select(b => b.Mesaj));
+
+                // Bildirimleri okundu olarak işaretle
+                foreach (var b in bildirimler) { b.OkunduMu = true; }
+                await _db.SaveChangesAsync();
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        Swal.fire({
+                            title: 'Önemli Bildirim',
+                            html: '@Html.Raw(mesaj)',
+                            icon: 'info',
+                            confirmButtonText: 'Anladım'
+                        });
+                    });
+                </script>
+            }
+        }
+    }
 </body>
 </html>

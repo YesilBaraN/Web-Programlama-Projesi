@@ -3,93 +3,152 @@
     ViewData["Title"] = "Ana Sayfa";
 }
 
-<!-- HERO SECTION (BÜYÜK RESİM) -->
-<div class="row mb-5">
+<!-- HERO SECTION -->
+<div class="row mb-5" data-aos="zoom-in">
     <div class="col-12">
-        <div class="position-relative rounded-4 overflow-hidden shadow-lg" style="height: 500px;">
-            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop"
-                 class="w-100 h-100 object-fit-cover" alt="Fitness Gym" style="object-fit: cover;">
-
-            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center text-white"
-                 style="background: rgba(0,0,0,0.5);">
-                <h1 class="display-3 fw-bold mb-3 text-uppercase">Hedefine Ulaş</h1>
-                <p class="fs-4 mb-4 col-lg-8">Profesyonel eğitmenler ve yapay zeka destekli programlarla en iyi versiyonunu yarat.</p>
-
-                <div class="d-flex gap-3">
+        <div class="position-relative rounded-4 overflow-hidden shadow-lg" style="height: 550px;">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop" 
+                 class="w-100 h-100 object-fit-cover" alt="Fitness Gym" style="object-fit: cover; filter: brightness(0.7);">
+            
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center text-white">
+                <h1 class="display-3 fw-bold mb-3 text-uppercase" data-aos="fade-up" data-aos-delay="100">Hedefine Ulaş</h1>
+                <p class="fs-4 mb-4 col-lg-8" data-aos="fade-up" data-aos-delay="200">Profesyonel eğitmenler ve yapay zeka destekli programlarla en iyi versiyonunu yarat.</p>
+                
+                <div class="d-flex gap-3" data-aos="fade-up" data-aos-delay="300">
                     @if (!User.Identity.IsAuthenticated)
                     {
-                        <a asp-controller="Account" asp-action="Register" class="btn btn-danger btn-lg px-4 rounded-pill shadow">Hemen Başla</a>
-                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg px-4 rounded-pill">Giriş Yap</a>
+                        <a asp-controller="Account" asp-action="Register" class="btn btn-danger btn-lg px-5 py-3 rounded-pill shadow fw-bold">HEMEN BAŞLA</a>
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold">GİRİŞ YAP</a>
                     }
                     else
                     {
-                        <a href="#hizmetler" class="btn btn-light btn-lg px-4 rounded-pill text-dark fw-bold">Hizmetleri İncele</a>
-                        <a asp-controller="YapayZeka" asp-action="Index" class="btn btn-success btn-lg px-4 rounded-pill shadow">AI Koç</a>
+                        <a href="#hizmetler" class="btn btn-light btn-lg px-5 py-3 rounded-pill text-dark fw-bold">KEŞFET</a>
+                        <a asp-controller="YapayZeka" asp-action="Index" class="btn btn-success btn-lg px-5 py-3 rounded-pill shadow fw-bold"><i class="bi bi-robot"></i> AI KOÇ</a>
                     }
                 </div>
             </div>
         </div>
     </div>
+</div
+
+<!-- İSTATİSTİKLER -->
+<div class="container mb-5">
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="0">
+            <div class="p-4 bg-white rounded-4 text-center shadow-sm border border-light h-100">
+                <i class="bi bi-people-fill fs-1 text-primary mb-2"></i>
+                <h3 class="fw-bold m-0">500+</h3>
+                <small class="text-muted">Mutlu Üye</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="p-4 bg-white rounded-4 text-center shadow-sm border border-light h-100">
+                <i class="bi bi-trophy-fill fs-1 text-warning mb-2"></i>
+                <h3 class="fw-bold m-0">15+</h3>
+                <small class="text-muted">Uzman Eğitmen</small>
+            </div>
+        </div>
+        <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="200">
+             <div class="p-4 bg-white rounded-4 text-center shadow-sm border border-light h-100">
+                <i class="bi bi-robot fs-1 text-success mb-2"></i>
+                <h3 class="fw-bold m-0">AI</h3>
+                <small class="text-muted">Yapay Zeka Destekli</small>
+            </div>
+        </div>
+    </div>
 </div>
 
+
+<!-- NEDEN BİZ? (Metin Alanı) -->
+<div class="container mb-5">
+    <div class="row align-items-center bg-white rounded-4 shadow-sm p-4 border border-light">
+        <div class="col-md-6">
+            <h6 class="text-primary fw-bold text-uppercase">Farkımız Nedir?</h6>
+            <h2 class="fw-bold mb-3">Sadece Spor Değil, <br /> Bir Yaşam Tarzı.</h2>
+            <p class="text-muted">
+                FitnessPro olarak standart spor salonu anlayışını yıkıyoruz.
+                Sadece aletleri kullanıp gitmenizi değil, <strong>Yapay Zeka destekli analizlerimizle</strong>
+                gelişiminizi anlık takip etmenizi sağlıyoruz.
+            </p>
+            <ul class="list-unstyled mt-3">
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Kişiye Özel Beslenme Programı</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Mobil Uyumlu Randevu Sistemi</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Hijyenik ve Geniş Alanlar</li>
+            </ul>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="https://img.freepik.com/free-vector/workout-concept-illustration_114360-1114.jpg" class="img-fluid" style="max-height: 300px;" alt="Workout Vector">
+        </div>
+    </div>
+</div>
 <!-- HİZMETLER -->
-<div id="hizmetler" class="mb-5">
-    <div class="text-center mb-5">
+<div id="hizmetler" class="mb-5 pt-5">
+    <div class="text-center mb-5" data-aos="fade-in">
         <h6 class="text-primary fw-bold text-uppercase ls-2">Neler Sunuyoruz?</h6>
-        <h2 class="fw-bold">Hizmetlerimiz</h2>
+        <h2 class="fw-bold display-6">Hizmetlerimiz</h2>
+        <div class="mx-auto mt-2" style="width: 60px; height: 3px; background-color: #e74c3c;"></div>
     </div>
 
     <div class="row g-4">
+        @{ int delay = 0; }
         @foreach (var item in Model.Hizmetler)
         {
-            <div class="col-md-4">
-                <div class="card h-100 text-center p-3">
-                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px;">
-                        @if (!string.IsNullOrEmpty(item.ResimUrl))
-                        {
-                            <img src="@item.ResimUrl" class="img-fluid" style="max-height: 100%; object-fit: contain;" alt="@item.HizmetAdi">
-                        }
-                        else
-                        {
-                            <i class="bi bi-activity fs-1 text-muted"></i>
-                        }
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="@delay">
+                <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+                    <div class="position-relative" style="height: 220px; overflow: hidden;">
+                         @if (!string.IsNullOrEmpty(item.ResimUrl))
+                         {
+                            <img src="@item.ResimUrl" class="w-100 h-100 object-fit-cover transition-transform" alt="@item.HizmetAdi">
+                         }
+                         else
+                         {
+                             <div class="w-100 h-100 bg-light d-flex align-items-center justify-content-center">
+                                 <i class="bi bi-activity fs-1 text-muted"></i>
+                             </div>
+                         }
+                         <div class="position-absolute top-0 end-0 m-3">
+                             <span class="badge bg-white text-dark shadow-sm py-2 px-3 rounded-pill fw-bold">@item.Ucret.ToString("N0") TL</span>
+                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body text-center p-4">
                         <h4 class="card-title fw-bold">@item.HizmetAdi</h4>
-                        <p class="text-muted small">@item.Aciklama</p>
-                        <h5 class="text-primary fw-bold mb-3">@item.Ucret.ToString("N0") TL</h5>
-                        <a asp-controller="Randevu" asp-action="Al" asp-route-hizmetId="@item.Id" class="btn btn-primary w-100 rounded-pill">Randevu Al</a>
+                        <p class="text-muted small mb-4">@item.Aciklama</p>
+                        <a asp-controller="Randevu" asp-action="Al" asp-route-hizmetId="@item.Id" class="btn btn-outline-primary rounded-pill w-100 fw-bold">RANDEVU AL</a>
                     </div>
                 </div>
             </div>
+            delay += 100;
         }
     </div>
 </div>
-
 <!-- ANTRENÖRLER -->
-<div class="mb-5">
+<div class="mb-5 pt-5 bg-light rounded-4 p-5" data-aos="fade-up">
     <div class="text-center mb-5">
         <h6 class="text-danger fw-bold text-uppercase ls-2">Kadro</h6>
-        <h2 class="fw-bold">Eğitmenlerimiz</h2>
+        <h2 class="fw-bold display-6">Eğitmenlerimiz</h2>
+        <div class="mx-auto mt-2" style="width: 60px; height: 3px; background-color: #2c3e50;"></div>
     </div>
 
     <div class="row g-4">
+        @{ int trainerDelay = 0; }
         @foreach (var item in Model.Antrenörler)
         {
-            <div class="col-md-3">
-                <div class="card h-100 text-center py-4">
-                    <div class="mx-auto mb-3" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 3px solid #e74c3c;">
-                        <img src="@item.FotoUrl" class="w-100 h-100 object-fit-cover" alt="@item.AdSoyad" style="object-fit: cover;">
+            <div class="col-md-3" data-aos="flip-left" data-aos-delay="@trainerDelay">
+                <div class="card h-100 text-center py-4 border-0 shadow-sm">
+                    <div class="mx-auto mb-3 position-relative" style="width: 120px; height: 120px;">
+                        <img src="@item.FotoUrl" class="w-100 h-100 rounded-circle object-fit-cover border border-4 border-white shadow" alt="@item.AdSoyad">
+                        <div class="position-absolute bottom-0 end-0 bg-success border border-2 border-white rounded-circle p-2" style="width: 20px; height: 20px;"></div>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title fw-bold">@item.AdSoyad</h5>
-                        <span class="badge bg-light text-dark border mb-2">@item.UzmanlikAlani</span>
-                        <p class="small text-muted mb-0">
-                            <i class="bi bi-clock-history"></i> @item.BaslangicSaati - @item.BitisSaati
-                        </p>
+                        <h5 class="card-title fw-bold mb-1">@item.AdSoyad</h5>
+                        <p class="text-primary small fw-bold mb-2">@item.UzmanlikAlani</p>
+                        <div class="badge bg-light text-dark border px-3 py-2">
+                            <i class="bi bi-clock"></i> @item.BaslangicSaati.ToString(@"hh\:mm") - @item.BitisSaati.ToString(@"hh\:mm")
+                        </div>
                     </div>
                 </div>
             </div>
+            trainerDelay += 100;
         }
     </div>
 </div>

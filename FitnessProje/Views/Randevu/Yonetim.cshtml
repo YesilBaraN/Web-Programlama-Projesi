@@ -48,25 +48,37 @@
                             }
                         </td>
                         <td class="text-end pe-4">
-                            @if (item.Durum == "OnayBekliyor")
-                            {
-                                <div class="btn-group shadow-sm rounded-pill" role="group">
-                                    <form asp-action="DurumDegistir" method="post">
-                                        <input type="hidden" name="id" value="@item.Id" />
-                                        <input type="hidden" name="durum" value="Onaylandi" />
-                                        <button type="submit" class="btn btn-sm btn-success rounded-start-pill px-3"><i class="bi bi-check-lg"></i></button>
-                                    </form>
-                                    <form asp-action="DurumDegistir" method="post">
-                                        <input type="hidden" name="id" value="@item.Id" />
-                                        <input type="hidden" name="durum" value="Iptal" />
-                                        <button type="submit" class="btn btn-sm btn-danger rounded-end-pill px-3"><i class="bi bi-x-lg"></i></button>
-                                    </form>
-                                </div>
-                            }
-                            else
-                            {
-                                <span class="text-muted small fst-italic">İşlem Tamam</span>
-                            }
+                            <div class="d-flex justify-content-end gap-2">
+
+                                @if (item.Durum == "OnayBekliyor")
+                                {
+                                    <div class="btn-group shadow-sm rounded-pill" role="group">
+                                        <form asp-action="DurumDegistir" method="post">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="durum" value="Onaylandi" />
+                                            <button type="submit" class="btn btn-sm btn-success rounded-start-pill px-3" title="Onayla"><i class="bi bi-check-lg"></i></button>
+                                        </form>
+                                        <form asp-action="DurumDegistir" method="post">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="durum" value="Iptal" />
+                                            <button type="submit" class="btn btn-sm btn-warning rounded-end-pill px-3" title="Reddet"><i class="bi bi-x-lg"></i></button>
+                                        </form>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-light text-muted border align-self-center">İşlem Yapıldı</span>
+                                }
+
+                                <!-- SİLME BUTONU (Her durumda görünür) -->
+                                <form asp-action="Sil" method="post" class="d-inline silme-formu">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 ms-2" onclick="silmeOnayi(this)">
+                                        <i class="bi bi-trash"></i> Sil
+                                    </button>
+                                </form>
+
+                            </div>
                         </td>
                     </tr>
                 }
@@ -74,3 +86,24 @@
         </table>
     </div>
 </div>
+@section Scripts {
+    <script>
+        function silmeOnayi(button) {
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Bu randevu kalıcı olarak silinecek! Üyeye bildirim gönderilecek.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Evet, Sil!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Kullanıcı evet derse, butonu kapsayan formu gönder
+                    button.closest('form').submit();
+                }
+            })
+        }
+    </script>
+}

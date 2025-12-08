@@ -65,3 +65,57 @@ a {
 .nav-link:hover {
     color: #3498db !important;
 }
+
+
+/* --- EXTRA GÖRSEL DOKUNUÞLAR --- */
+
+/* Sayfa kaydýrma efekti yumuþak olsun */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Metin seçildiðinde çýkan renk (Mavi yerine bizim renkler) */
+::selection {
+    background: #e74c3c;
+    color: white;
+}
+
+/* Scrollbar (Kaydýrma çubuðu) tasarýmý */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2c3e50;
+    border-radius: 10px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #3498db;
+    }
+
+
+/* --- YENÝ EFEKTLER --- */
+
+/* Kart resimlerine zoom efekti */
+.card:hover .object-fit-cover {
+    transform: scale(1.1);
+}
+
+.object-fit-cover {
+    transition: transform 0.5s ease;
+}
+
+/* Hover Shadow */
+.hover-shadow:hover {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+}
+
+/* Spinner (Yükleniyor) Ortala */
+#preloader {
+    backdrop-filter: blur(5px);
+}

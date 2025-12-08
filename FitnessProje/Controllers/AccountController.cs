@@ -35,8 +35,12 @@ namespace FitnessProje.Controllers
             {
                 // Şifreyi kontrol et ve giriş yap
                 var result = await _signInManager.PasswordSignInAsync(user, model.Sifre, model.BeniHatirla, false);
+                // AccountController.cs -> Login Post Metodu içi
                 if (result.Succeeded)
                 {
+                    // BU SATIRI EKLE:
+                    TempData["Basarili"] = "Başarıyla giriş yaptınız. Hoş geldiniz!";
+
                     return RedirectToAction("Index", "Home");
                 }
             }

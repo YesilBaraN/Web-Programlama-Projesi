@@ -10,7 +10,8 @@ namespace FitnessProje.Data
             : base(options)
         {
         }
-
+       
+        public DbSet<Bildirim> Bildirimler { get; set; }
         public DbSet<Hizmetler> Hizmetler { get; set; }
         public DbSet<Antrenör> Antrenörler { get; set; }
         public DbSet<RandevuSistemi> Randevular { get; set; }
