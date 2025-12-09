@@ -78,6 +78,10 @@
                     </ul>
 
                     <div class="d-flex align-items-center gap-2">
+                        <a class="btn btn-success btn-sm rounded-pill px-3 shadow-sm fw-bold text-white me-2"
+                           asp-controller="Randevu" asp-action="Basla">
+                            <i class="bi bi-calendar-plus-fill me-1"></i> Randevu Al
+                        </a>
                         @if (User.Identity.IsAuthenticated)
                         {
                             <span class="text-muted small me-2">Merhaba, <strong>@User.Identity.Name</strong></span>
@@ -141,7 +145,7 @@
             <text>
                 Swal.fire({
                     title: 'Harika!',
-                    text: '@TempData["Basarili"]',
+                        text: '@Html.Raw(TempData["Basarili"])',
                     icon: 'success',
                     confirmButtonText: 'Tamam',
                     confirmButtonColor: '#2c3e50'
@@ -155,7 +159,7 @@
             <text>
                 Swal.fire({
                     title: 'Ops!',
-                    text: '@TempData["Hata"]',
+                        text: '@Html.Raw(TempData["Hata"])',
                     icon: 'error',
                     confirmButtonText: 'Tamam',
                     confirmButtonColor: '#e74c3c'
@@ -181,13 +185,13 @@
                     if (result.isConfirmed) {
                         var form = document.createElement('form');
                         form.method = 'POST';
-                        var controller = '@TempData["SilinecekTur"]' == 'Antrenor' ? '/Antrenörler/ForceDelete' : '/Hizmetler/ForceDelete';
+                        var controller = '@Html.Raw(TempData["SilinecekTur"])' == 'Antrenor' ? '/Antrenörler/ForceDelete' : '/Hizmetler/ForceDelete';
                         form.action = controller;
 
                         var input = document.createElement('input');
                         input.type = 'hidden';
                         input.name = 'id';
-                        input.value = '@TempData["SilinecekId"]';
+                        input.value = '@Html.Raw(TempData["SilinecekId"])';
 
                         form.appendChild(input);
                         document.body.appendChild(form);

@@ -200,5 +200,28 @@ namespace FitnessProje.Controllers
             TempData["Basarili"] = "Randevu kalıcı olarak silindi ve üyeye bildirim gönderildi.";
             return RedirectToAction(nameof(Yonetim));
         }
+
+
+        // --- 7. RANDEVU BAŞLANGIÇ (Hizmet Seçimi veya Login Kontrolü) ---
+        [HttpGet]
+        [AllowAnonymous] // Herkes tıklayabilir, içeride kontrol edeceğiz
+        public async Task<IActionResult> Basla()
+        {
+            // 1. KONTROL: Kullanıcı giriş yapmış mı?
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Giriş yapmamışsa uyarı ver ve Kayıt Ol sayfasına at
+                TempData["Hata"] = "Randevu almak için üye olmanız gerekmektedir. Lütfen önce kayıt olun.";
+                return RedirectToAction("Register", "Account");
+            }
+
+            // 2. KONTROL: Eğer giriş yapmışsa Hizmetleri getir
+            var hizmetler = await _context.Hizmetler.ToListAsync();
+            return View(hizmetler);
+        }
+
+
+
+
     }
 }

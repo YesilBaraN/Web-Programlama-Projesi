@@ -1,0 +1,44 @@
+﻿@model IEnumerable<FitnessProje.Models.Hizmetler>
+
+@{
+    ViewData["Title"] = "Hizmet Seçimi";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h6 class="text-primary fw-bold text-uppercase">Adım 1 / 2</h6>
+        <h2 class="fw-bold">Hangi Hizmet İçin Randevu Alacaksınız?</h2>
+        <p class="text-muted">Devam etmek için lütfen bir ders seçiniz.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-3 hover-shadow">
+                    <div style="height: 150px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 10px;">
+                        @if (!string.IsNullOrEmpty(item.ResimUrl))
+                        {
+                            <img src="@item.ResimUrl" class="img-fluid" style="max-height: 100%; object-fit: contain;" alt="@item.HizmetAdi">
+                        }
+                        else
+                        {
+                            <i class="bi bi-activity fs-1 text-muted"></i>
+                        }
+                    </div>
+                    <div class="card-body">
+                        <h5 class="fw-bold">@item.HizmetAdi</h5>
+                        <div class="d-flex justify-content-center gap-2 mb-3">
+                            <span class="badge bg-light text-dark border">@item.SureDakika dk</span>
+                            <span class="badge bg-success bg-opacity-10 text-success">@item.Ucret TL</span>
+                        </div>
+                        <!-- BU BUTON SENİ ASIL RANDEVU ALMA SAYFASINA GÖTÜRÜR -->
+                        <a asp-action="Al" asp-route-hizmetId="@item.Id" class="btn btn-primary w-100 rounded-pill stretched-link">
+                            Seç ve Devam Et <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
