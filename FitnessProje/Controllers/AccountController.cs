@@ -5,42 +5,38 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessProje.Controllers
 {
+    /// <summary>
+    /// Kullanıcı Kayıt, Giriş ve Çıkış işlemlerini yönetir.
+    /// Identity kütüphanesini kullanır.
+    /// </summary>
     public class AccountController : Controller
     {
         private readonly UserManager<UygulamaKullanıcı> _userManager;
         private readonly SignInManager<UygulamaKullanıcı> _signInManager;
 
-        // Constructor'da Identity servislerini çağırıyoruz
         public AccountController(UserManager<UygulamaKullanıcı> userManager, SignInManager<UygulamaKullanıcı> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
-        // --- GİRİŞ YAP (LOGIN) ---
+        #region Giriş İşlemleri (Login)
+
         [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
-            // Kullanıcıyı bul
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
-                // Şifreyi kontrol et ve giriş yap
                 var result = await _signInManager.PasswordSignInAsync(user, model.Sifre, model.BeniHatirla, false);
-                // AccountController.cs -> Login Post Metodu içi
                 if (result.Succeeded)
                 {
-                    // BU SATIRI EKLE:
                     TempData["Basarili"] = "Başarıyla giriş yaptınız. Hoş geldiniz!";
-
                     return RedirectToAction("Index", "Home");
                 }
             }
@@ -49,19 +45,18 @@ namespace FitnessProje.Controllers
             return View(model);
         }
 
-        // --- KAYIT OL (REGISTER) ---
+        #endregion
+
+        #region Kayıt İşlemleri (Register)
+
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
-            // E-posta daha önce alınmış mı?
             var userExists = await _userManager.FindByEmailAsync(model.Email);
             if (userExists != null)
             {
@@ -69,29 +64,26 @@ namespace FitnessProje.Controllers
                 return View(model);
             }
 
-            // Yeni kullanıcı oluştur
             var newUser = new UygulamaKullanıcı
             {
                 UserName = model.Email,
                 Email = model.Email,
                 Ad = model.Ad,
                 Soyad = model.Soyad,
-                EmailConfirmed = true // Şimdilik onaya gerek duymadan aktif et
+                EmailConfirmed = true
             };
 
             var result = await _userManager.CreateAsync(newUser, model.Sifre);
 
             if (result.Succeeded)
             {
-                // Varsayılan olarak "Uye" rolünü ata
-                await _userManager.AddToRoleAsync(newUser, "Uye");
-
-                // Otomatik giriş yap ve ana sayfaya yönlendir
+                await _userManager.AddToRoleAsync(newUser, "Uye"); // Varsayılan rol
                 await _signInManager.SignInAsync(newUser, isPersistent: false);
+
+                TempData["Basarili"] = "Kaydınız başarıyla oluşturuldu.";
                 return RedirectToAction("Index", "Home");
             }
 
-            // Hata varsa ekrana bas
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error.Description);
@@ -100,7 +92,8 @@ namespace FitnessProje.Controllers
             return View(model);
         }
 
-        // --- ÇIKIŞ YAP (LOGOUT) ---
+        #endregion
+
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
