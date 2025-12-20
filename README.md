@@ -8,9 +8,8 @@ ASP.NET Core MVC teknolojisi kullanılarak, spor salonları için kapsamlı bir 
 
 ## Proje Geliştiricileri
 
-*   **Öğrenci 1:** Adınız Soyadınız - Öğrenci Numaranız
-*   **Öğrenci 2 (varsa):** Diğer Öğrencinin Adı Soyadı - Numarası
-
+*   Baran Yeşilyurt (2-A) G231210078
+,
 ## Kullanılan Teknolojiler
 
 *   ASP.NET Core MVC
