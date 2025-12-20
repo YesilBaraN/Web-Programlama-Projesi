@@ -2,203 +2,186 @@
     ViewData["Title"] = "AI Neural Coach";
 }
 
-<!-- ÖZEL CSS: Sadece bu sayfaya özgü fütüristik stiller -->
 <style>
-    /* Arka Plan: Hareketli ve Derinlikli */
+    /* --- ARKA PLAN VE TEMEL AYARLAR --- */
     body {
-        background-color: #f0f2f5;
-        background-image:
-            radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%),
-            radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%),
-            radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-        background-attachment: fixed;
+        background-color: #0f0c29;
+        background-image: linear-gradient(315deg, #0f0c29 0%, #302b63 74%, #24243e 100%);
         min-height: 100vh;
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
     }
 
-    /* Glassmorphism Kart Yapısı */
+    /* --- CAM EFEKTİ (GLASSMORPHISM) PANELİ --- */
     .glass-panel {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px); /* Bulanıklık arttırıldı */
         -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 24px;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        overflow: hidden;
+        box-shadow: 0 0 40px rgba(0,0,0,0.5);
     }
 
-    /* Sol Panel: Kontrol Merkezi */
+    /* --- SOL PANEL (KONTROL) --- */
     .control-panel {
-        border-right: 1px solid rgba(0,0,0,0.05);
+        background: rgba(0, 0, 0, 0.2);
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
-    /* Form Elemanları */
+    /* --- INPUT VE SELECT AYARLARI (DÜZELTİLDİ) --- */
     .form-label-custom {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #6c757d;
-        font-weight: 700;
+        letter-spacing: 1.5px;
+        color: #a8b2d1;
+        font-weight: 600;
         margin-bottom: 8px;
     }
 
-    .custom-input {
-        background: #f8f9fa;
-        border: 2px solid transparent;
+    .custom-input, .form-select {
+        background: rgba(255, 255, 255, 0.1) !important; /* Hafif şeffaf */
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: #fff !important; /* Yazı rengi beyaz */
         border-radius: 12px;
-        padding: 12px 15px;
-        transition: all 0.3s ease;
-        font-weight: 600;
-        color: #2c3e50;
-    }
-
-    .custom-input:focus {
-        background: #fff;
-        border-color: #667eea;
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-        outline: none;
-    }
-
-    /* Özel Radyo Butonları (Cinsiyet Seçimi) */
-    .gender-selector input[type="radio"] {
-        display: none;
-    }
-    .gender-selector label {
-        display: block;
         padding: 12px;
-        text-align: center;
-        border: 2px solid #e9ecef;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-weight: 600;
-        color: #adb5bd;
-    }
-    .gender-selector input[type="radio"]:checked + label {
-        border-color: #667eea;
-        background: rgba(102, 126, 234, 0.1);
-        color: #667eea;
     }
 
-    /* Hedef Kartları */
-    .goal-card {
-        cursor: pointer;
-        border: 2px solid #e9ecef;
-        border-radius: 15px;
-        padding: 15px;
-        transition: all 0.3s;
-    }
-    .goal-card:hover {
-        transform: translateY(-3px);
-        border-color: #cbd5e0;
-    }
-    .goal-card.active {
-        border-color: #764ba2;
-        background: rgba(118, 75, 162, 0.05);
-    }
-    .goal-card i {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
-        display: block;
-    }
+        .custom-input:focus, .form-select:focus {
+            background: rgba(255, 255, 255, 0.2) !important;
+            border-color: #00c6ff !important;
+            box-shadow: 0 0 10px rgba(0, 198, 255, 0.3);
+            outline: none;
+        }
 
-    /* Generate Button */
+        /* --- KRİTİK DÜZELTME: SELECT OPTION GÖRÜNÜRLÜĞÜ --- */
+        /* Seçenekler açıldığında arka planı koyu yapıyoruz ki beyaz yazı okunsun */
+        .form-select option {
+            background-color: #24243e; /* Koyu Lacivert */
+            color: #fff;
+            padding: 10px;
+        }
+
+    /* --- BUTON TASARIMI --- */
     .btn-generate {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
         color: white;
         border: none;
         padding: 15px;
-        border-radius: 15px;
+        border-radius: 12px;
         font-weight: 700;
         letter-spacing: 1px;
-        text-transform: uppercase;
         width: 100%;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s;
-    }
-    .btn-generate:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
-        color: white;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
     }
 
-    /* AI Sonuç Alanı */
-    .ai-output-area {
-        background: #ffffff;
-        border-radius: 20px;
-        min-height: 100%;
-        position: relative;
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 114, 255, 0.6);
+            color: white;
+        }
+
+    /* --- SAĞ TARAF & RESİM (DÜZELTİLDİ) --- */
+    .result-image {
+        width: 100%;
+        /* max-height sınırını kaldırdık veya çok arttırdık */
+        height: auto;
+        min-height: 400px; /* En az bu kadar olsun */
+        object-fit: cover;
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.3);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        margin-bottom: 20px;
+        animation: zoomIn 0.8s ease;
     }
 
-    .ai-typing {
+    .result-text-box {
+        background: rgba(0,0,0,0.4);
+        padding: 25px;
+        border-radius: 15px;
         font-family: 'Courier New', Courier, monospace;
-        line-height: 1.6;
-        color: #2d3436;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: #e2e8f0;
+        border-left: 4px solid #00c6ff;
+        max-height: 500px; /* Metin kutusu çok uzamasın, scroll çıksın */
+        overflow-y: auto;
     }
 
-    /* Loading Animasyonu */
-    .ai-loader {
+    /* --- ANİMASYONLAR --- */
+    @@keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .loader-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 12, 41, 0.9); /* Arka planı biraz daha kararttık */
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 300px;
         flex-direction: column;
-    }
-    .pulse-ring {
-        display: block;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: #764ba2;
-        animation: pulse 2s infinite;
-    }
-    @@keyframes pulse {
-        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(118, 75, 162, 0.7); }
-        70% { transform: scale(1); box-shadow: 0 0 0 30px rgba(118, 75, 162, 0); }
-        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(118, 75, 162, 0); }
+        z-index: 20;
+        backdrop-filter: blur(8px);
+        border-radius: 24px;
     }
 </style>
 
 <div class="container py-5">
-
-    <!-- Başlık Alanı -->
-    <div class="text-center mb-5 text-white" data-aos="fade-down">
-        <div class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-10 rounded-pill px-4 py-2 mb-3 backdrop-blur">
-            <span class="badge bg-primary rounded-pill me-2">BETA</span>
-            <span class="small fw-bold letter-spacing-1">GOOGLE GEMINI 1.5 ENGINE</span>
-        </div>
-        <h1 class="display-4 fw-bold">AI Neural Coach</h1>
-        <p class="text-white-50">Sadece senin için tasarlanmış, biyometrik verilerine dayalı akıllı antrenman sistemi.</p>
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-white">AI <span style="color:#00c6ff;">NEURAL</span> COACH</h1>
+        <p class="text-white-50">Hedefini seç, Yapay Zeka hem planını yazsın hem geleceğini çizsin.</p>
     </div>
 
-    <!-- ANA PANEL -->
-    <div class="glass-panel overflow-hidden" data-aos="zoom-in" data-aos-duration="1000">
+    <div class="glass-panel">
         <div class="row g-0">
 
-            <!-- SOL TARAFF: GİRDİ PANELİ -->
-            <div class="col-lg-4 p-4 p-md-5 bg-white control-panel">
-                <h4 class="fw-bold mb-4 text-dark"><i class="bi bi-sliders me-2"></i>Parametreler</h4>
+            <!-- SOL: FORM -->
+            <div class="col-lg-4 p-5 control-panel">
+                <form asp-action="AnalizYap" method="post" onsubmit="startLoading()">
 
-                <form asp-action="OneriAl" method="post" id="aiForm" onsubmit="startProcessing()">
-
-                    <!-- Cinsiyet -->
                     <div class="mb-4">
-                        <label class="form-label-custom">Biyolojik Kimlik</label>
-                        <div class="row g-2 gender-selector">
-                            <div class="col-6">
-                                <input type="radio" id="male" name="cinsiyet" value="Erkek" checked>
-                                <label for="male"><i class="bi bi-gender-male me-1"></i> Erkek</label>
-                            </div>
-                            <div class="col-6">
-                                <input type="radio" id="female" name="cinsiyet" value="Kadın">
-                                <label for="female"><i class="bi bi-gender-female me-1"></i> Kadın</label>
-                            </div>
-                        </div>
+                        <label class="form-label-custom">KİMLİK</label>
+                        <!-- DÜZELTME: Option'ların arka planı CSS ile düzeltildi -->
+                        <select name="cinsiyet" class="form-select form-select-lg">
+                            <option value="Erkek">Erkek</option>
+                            <option value="Kadın">Kadın</option>
+                        </select>
                     </div>
 
-                    <!-- Metrikler -->
                     <div class="mb-4">
-                        <label class="form-label-custom">Vücut Metrikleri</label>
-                        <div class="row g-3">
+                        <label class="form-label-custom">METRİKLER</label>
+                        <div class="row g-2">
                             <div class="col-4">
                                 <input type="number" name="yas" class="form-control custom-input text-center" placeholder="Yaş" value="@ViewBag.Yas" required>
                             </div>
@@ -211,130 +194,89 @@
                         </div>
                     </div>
 
-                    <!-- Hedef Seçimi (Görsel Kartlar) -->
                     <div class="mb-5">
-                        <label class="form-label-custom">Ana Hedef</label>
-                        <input type="hidden" name="hedef" id="selectedGoal" value="Hızlı Kilo Verme">
-
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <div class="goal-card active text-center" onclick="selectGoal(this, 'Hızlı Kilo Verme')">
-                                    <i class="bi bi-lightning-charge-fill text-warning"></i>
-                                    <div class="small fw-bold">Kilo Ver</div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="goal-card text-center" onclick="selectGoal(this, 'Kas Kütlesi Kazanma')">
-                                    <i class="bi bi-hdd-stack-fill text-danger"></i>
-                                    <div class="small fw-bold">Kas Yap</div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="goal-card text-center" onclick="selectGoal(this, 'Yağ Yakımı ve Sıkılaşma')">
-                                    <i class="bi bi-fire text-danger"></i>
-                                    <div class="small fw-bold">Sıkılaş</div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="goal-card text-center" onclick="selectGoal(this, 'Sağlıklı Yaşam')">
-                                    <i class="bi bi-heart-pulse-fill text-success"></i>
-                                    <div class="small fw-bold">Sağlık</div>
-                                </div>
-                            </div>
-                        </div>
+                        <label class="form-label-custom">ANA HEDEF</label>
+                        <!-- DÜZELTME: Dropdown açılınca yazılar okunacak -->
+                        <select name="hedef" class="form-select form-select-lg">
+                            <option value="Hızlı Kilo Verme">🏃 Hızlı Kilo Verme (Yağ Yakımı)</option>
+                            <option value="Kas Kütlesi Kazanma">💪 Kas Yapma / Hacim</option>
+                            <option value="Sıkılaşma ve Fit Görünüm">🧘 Sıkılaşma / Fit Görünüm</option>
+                        </select>
                     </div>
 
-                    <button type="submit" id="btnAnaliz" class="btn-generate">
-                        <i class="bi bi-cpu-fill me-2"></i> Analizi Başlat
+                    <button type="submit" class="btn-generate py-3">
+                        ANALİZ & ÜRETİM BAŞLAT <i class="bi bi-arrow-right-short"></i>
                     </button>
                 </form>
             </div>
 
-            <!-- SAĞ TARAF: ÇIKTI PANELİ -->
-            <div class="col-lg-8 p-4 p-md-5 bg-light position-relative">
+            <!-- SAĞ: SONUÇ EKRANI -->
+            <div class="col-lg-8 p-5 position-relative" style="min-height: 600px;">
 
-                <!-- DURUM 1: Bekleme / Yükleme Ekranı -->
-                <div id="loadingArea" style="display:none;" class="h-100">
-                    <div class="ai-loader">
-                        <div class="pulse-ring mb-4"></div>
-                        <h5 class="fw-bold text-dark">Neural Engine Çalışıyor...</h5>
-                        <p class="text-muted small">Veriler Google Cloud sunucularında işleniyor</p>
-                        <div class="mt-3 text-start ps-5 pe-5" style="width:100%; max-width:400px;">
-                            <small class="text-muted d-block mb-1"><i class="bi bi-check2 text-success"></i> Biyometrik veriler alındı</small>
-                            <small class="text-muted d-block mb-1"><i class="bi bi-check2 text-success"></i> Hedef analizi yapıldı</small>
-                            <small class="text-muted d-block loading-text"><i class="bi bi-arrow-repeat"></i> Program oluşturuluyor...</small>
-                        </div>
-                    </div>
+                <!-- LOADING -->
+                <div id="loadingOverlay" class="loader-overlay" style="display:none;">
+                    <div class="spinner-border text-info mb-4" style="width: 4rem; height: 4rem;" role="status"></div>
+                    <h4 class="text-white fw-light letter-spacing-1">SİNİR AĞLARI ÇALIŞIYOR...</h4>
+                    <small class="text-white-50 mt-2">Vücut analizi yapılıyor ve görsel oluşturuluyor.</small>
                 </div>
 
-                <!-- DURUM 2: Sonuç Ekranı -->
                 @if (ViewBag.Sonuc != null)
                 {
-                    <div class="ai-output-area h-100 d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-                            <div>
-                                <h3 class="fw-bold m-0 text-dark">Sonuç Raporu</h3>
-                                <small class="text-muted">ID: @Guid.NewGuid().ToString().Substring(0, 8).ToUpper() | @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</small>
-                            </div>
-                            <a asp-controller="Home" asp-action="Index" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                <i class="bi bi-save me-1"></i> Kaydet
-                            </a>
-                        </div>
+                    <div class="h-100 d-flex flex-column fade-in">
 
-                        <div class="flex-grow-1 overflow-auto pe-2 ai-typing">
-                            <!-- AI Çıktısı Buraya -->
+                        <!-- 1. RESİM ALANI (Boyutu büyütüldü) -->
+                        @if (ViewBag.UretilenResim != null)
+                        {
+                            <div class="text-center mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2 px-2">
+                                    <span class="badge bg-warning text-dark"><i class="bi bi-stars"></i> HEDEF GÖRÜNTÜN</span>
+                                    <a href="@ViewBag.UretilenResim" target="_blank" class="btn btn-sm btn-outline-light rounded-pill px-3">
+                                        <i class="bi bi-download"></i> İndir
+                                    </a>
+                                </div>
+                                <!-- DÜZELTME: Resim artık kutuya sığıyor ve büyük görünüyor -->
+                                <img src="@ViewBag.UretilenResim" class="result-image" alt="AI Generated Fitness Goal">
+                            </div>
+                        }
+
+                        <!-- 2. METİN PLANI -->
+                        <div class="result-text-box flex-grow-1">
+                            <h6 class="text-info mb-3 border-bottom border-secondary pb-2">📋 YAPAY ZEKA RAPORU</h6>
                             @ViewBag.Sonuc
                         </div>
 
-                        <div class="mt-4 pt-3 border-top">
-                            <div class="alert alert-light border d-flex align-items-center mb-0">
-                                <i class="bi bi-info-circle-fill text-primary fs-4 me-3"></i>
-                                <div class="small text-muted">
-                                    Bu program <strong>Yapay Zeka</strong> tarafından oluşturulmuştur. Profesyonel bir eğitmen ile görüşerek programı doğrulamanız önerilir.
-                                </div>
-                            </div>
+                        <div class="mt-3 text-end">
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-success px-4 rounded-pill">
+                                <i class="bi bi-check2-circle me-2"></i>Planı Uygula
+                            </a>
                         </div>
                     </div>
                 }
                 else
                 {
-                    <!-- DURUM 3: Boş Ekran (İlk Açılış) -->
-                    <div id="emptyState" class="h-100 d-flex flex-column justify-content-center align-items-center text-center opacity-50">
-                        <img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png" width="120" class="mb-4 grayscale" style="filter: grayscale(100%); opacity: 0.5;">
-                        <h3 class="fw-bold">Sistem Hazır</h3>
-                        <p class="col-8 mx-auto">Sol taraftaki panelden parametreleri girerek yapay zeka motorunu başlatın.</p>
+                    <!-- BOŞ DURUM -->
+                    <div class="h-100 d-flex flex-column align-items-center justify-content-center opacity-50 text-center">
+                        <i class="bi bi-cpu display-1 mb-4 text-white" style="font-size: 5rem;"></i>
+                        <h3 class="fw-light mb-3">SİSTEM HAZIR</h3>
+                        <p class="text-white-50 w-75 mx-auto fs-5">
+                            Sol panelden verilerinizi girin. <br>
+                            <strong>Google Gemini</strong> size özel bir plan yazacak ve
+                            gelecekteki halinizi foto gerçekçi olarak çizecek.
+                        </p>
                     </div>
                 }
-
             </div>
+
         </div>
     </div>
 </div>
 
-<!-- JAVASCRIPT: Sayfa İçi Etkileşimler -->
 <script>
-    // Hedef Kartlarını Seçme Mantığı
-    function selectGoal(element, goalValue) {
-        // Tüm kartlardan active sınıfını kaldır
-        document.querySelectorAll('.goal-card').forEach(el => el.classList.remove('active'));
-
-        // Tıklanana ekle
-        element.classList.add('active');
-
-        // Gizli inputa değeri yaz
-        document.getElementById('selectedGoal').value = goalValue;
+    function startLoading() {
+        // Loading ekranını göster
+        document.getElementById('loadingOverlay').style.display = 'flex';
+        // Butonu pasif yap (Çift tıklamayı önlemek için)
+        document.querySelector('.btn-generate').disabled = true;
+        document.querySelector('.btn-generate').innerHTML = 'İŞLENİYOR...';
     }
-
-    // Yükleme Animasyonunu Başlat
-    function startProcessing() {
-        document.getElementById('btnAnaliz').disabled = true;
-        document.getElementById('btnAnaliz').innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> İşleniyor...';
-
-        // Boş durumu gizle
-        var emptyState = document.getElementById('emptyState');
-        if(emptyState) emptyState.style.display = 'none';
-
-        // Loading'i göster
-        document.getElementById('loadingArea').style.display = 'flex';
-    }
-</script> 
+</script>
